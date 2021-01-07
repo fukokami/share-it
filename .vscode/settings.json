@@ -1,0 +1,21 @@
+{
+    "cSpell.words": [
+        "Affero",
+        "Sublicensing",
+        "WIPO",
+        "asgi",
+        "backends",
+        "dbname",
+        "dpage",
+        "pgadmin",
+        "postgres",
+        "postgresql",
+        "psql",
+        "runserver",
+        "startapp",
+        "startproject",
+        "venv"
+    ],
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true,
+}
