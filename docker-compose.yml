@@ -1,0 +1,52 @@
+version: '3.7'
+
+services:
+  web:
+    build: .
+    command: python src/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./src:/usr/src/app/src
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env
+    networks:
+      - backend
+    depends_on:
+      - db
+
+  db:
+    image: postgres:10.15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${SQL_USER}
+      - POSTGRES_PASSWORD=${SQL_PASSWORD}
+      - POSTGRES_DB=${SQL_DATABASE}
+    ports:
+      - "5432:5432"
+    networks:
+      - backend
+
+  pgadmin:
+    image: dpage/pgadmin4:4.18
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${SQL_ADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${SQL_ADMIN_PASSWORD}
+      - PGADMIN_LISTEN_PORT=${SQL_ADMIN_PORT}
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - backend
+    depends_on:
+      - "db"
+
+volumes:
+  postgres_data:
+  pgadmin-data:
+
+networks:
+    backend:
+      driver: bridge 
