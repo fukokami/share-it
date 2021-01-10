@@ -38,6 +38,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
+    # django-allauth
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.facebook",
+    "allauth.socialaccount.providers.github",
+    "allauth.socialaccount.providers.google",
 ]
 
 MIDDLEWARE = [
@@ -55,7 +63,9 @@ ROOT_URLCONF = "share_it.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [
+            os.path.join(BASE_DIR, "accounts/templates"),
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -63,6 +73,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.request",
             ],
         },
     },
@@ -104,6 +115,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
@@ -123,3 +138,76 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
+
+
+# Mail
+# https://docs.djangoproject.com/en/3.1/topics/email/
+
+EMAIL_HOST = "smtp.mailtrap.io"
+EMAIL_HOST_USER = os.environ.get("EMAIL_ID")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_PASSWORD")
+EMAIL_PORT = os.environ.get("EMAIL_PORT", "2525")
+
+DEFAULT_FROM_EMAIL = os.environ.get("EMAIL_FROM_USER", "no-reply@mail.shareit.com")
+
+
+# Django allauth settings
+# https://django-allauth.readthedocs.io/en/latest/configuration.html
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_CONFIRM_EMAIL_ON_GET = False
+ACCOUNT_EMAIL_CONFIRMATION_HMAC = False
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = os.environ.get("ACCOUNT_EMAIL_CONFIRM_ANONYMOUS_URL", "/")
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = os.environ.get("ACCOUNT_EMAIL_CONFIRM_AUTHENTICATED_URL", "/")
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = int(os.environ.get("ACCOUNT_EMAIL_CONFIRM_EXPIRE_DAYS", 3))
+ACCOUNT_EMAIL_VERIFICATION = os.environ.get("ACCOUNT_EMAIL_VERIFICATION", "mandatory")
+ACCOUNT_EMAIL_CONFIRMATION_COOLDOWN = int(os.environ.get("ACCOUNT_EMAIL_CONFIRMATION_COOLDOWN", 180))
+ACCOUNT_MAX_EMAIL_ADDRESSES = None
+
+LOGIN_REDIRECT_URL = os.environ.get("LOGIN_REDIRECT_URL", "/")
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = int(os.environ.get("ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT", 300))
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = int(os.environ.get("ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION", 0))
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = int(os.environ.get("ACCOUNT_LOGIN_ATTEMPTS_LIMIT", 5))
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = int(os.environ.get("ACCOUNT_LOGIN_ON_PASSWORD_RESET", default=0))
+
+ACCOUNT_LOGOUT_ON_GET = False
+ACCOUNT_PRESERVE_USERNAME_CASING = False
+ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = int(os.environ.get("ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE", default=0))
+ACCOUNT_LOGOUT_REDIRECT_URL = os.environ.get("ACCOUNT_LOGOUT_REDIRECT_URL", "/")
+ACCOUNT_PASSWORD_INPUT_RENDER_VALUE = False
+ACCOUNT_SESSION_REMEMBER = None
+
+
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = False
+ACCOUNT_SIGNUP_REDIRECT_URL = os.environ.get("ACCOUNT_SIGNUP_REDIRECT_URL", "/")
+ACCOUNT_SIGNUP_FORM_CLASS = None
+
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_MIN_LENGTH = int(os.environ.get("ACCOUNT_USERNAME_MIN_LENGTH", 8))
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_USERNAME_VALIDATORS = None
+
+SOCIALACCOUNT_EMAIL_VERIFICATION = os.environ.get("SOCIALACCOUNT_EMAIL_VERIFICATION", "mandatory")
+SOCIALACCOUNT_EMAIL_REQUIRED = True
+SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_STORE_TOKENS = True
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "SCOPE": ["email", "profile"],
+        "AUTH_PARAMS": {"access_type": "offline"},
+    },
+    "facebook": {
+        "METHOD": "oauth2",
+        "FIELDS": ["id", "first_name", "last_name", "middle_name", "name", "name_format", "picture", "short_name"],
+        "SCOPE": ["email", "public_profile"],
+        "VERIFIED_EMAIL": False,
+        "VERSION": "v9.0",
+    },
+    "github": {
+        "SCOPE": ["user:email", "read:user"],
+    },
+}
