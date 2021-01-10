@@ -3,19 +3,46 @@
         "Affero",
         "Sublicensing",
         "WIPO",
+        "allauth",
         "asgi",
         "backends",
+        "cooldown",
         "dbname",
         "dpage",
+        "hmac",
         "pgadmin",
         "postgres",
         "postgresql",
         "psql",
+        "reauthenticate",
         "runserver",
+        "signup",
+        "socialaccount",
         "startapp",
         "startproject",
+        "uidb",
         "venv"
     ],
     "python.formatting.provider": "black",
     "editor.formatOnSave": true,
+    "python.formatting.blackArgs": [
+        "--line-length=119"
+    ],
+    "files.associations": {
+        "**/*.html": "html",
+        "**/templates/**/*.html": "django-html",
+        "**/templates/**/*": "django-txt",
+        "**/requirements{/**,*}.{txt,in}": "pip-requirements"
+    },
+    "emmet.includeLanguages": {
+        "django-html": "html"
+    },
+    "html.format.enable": true,
+    "beautify.language": {
+        "html": [
+            "htm",
+            "html",
+            "django-html"
+        ]
+     },
 }
