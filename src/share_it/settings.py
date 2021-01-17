@@ -46,6 +46,10 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.facebook",
     "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.google",
+    # sass_processor
+    "django_sass_compiler",
+    # app
+    "accounts",
 ]
 
 MIDDLEWARE = [
@@ -137,7 +141,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
 STATIC_URL = "/static/"
+
+SASS_COMPILER_NO_BUILD = True
+
+SASS_COMPILER_MAP = True
 
 
 # Mail

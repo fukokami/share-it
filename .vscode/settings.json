@@ -6,6 +6,7 @@
         "allauth",
         "asgi",
         "backends",
+        "cbox",
         "cooldown",
         "dbname",
         "dpage",

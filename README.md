@@ -5,7 +5,7 @@ Website supports the create blogs
 
 ```bash
 python -m venv env                  #Only first time
-source env/bin/activate             #On Windows use `env\Scripts\activate`
+source env/bin/activate             #On Windows use `env/Scripts/activate`
 pip install -r requirements.txt
 set -a; source .env; set +a
 ```
@@ -31,6 +31,10 @@ docker-compose up -d
 | **Database**          |                                                               | 
 | postgres command line | `docker-compose exec db psql --username=<user> --dbname=<db>` |
 
+## SCSS compiler
+```bash
+python src/manage.py sass-compiler --watch
+```
 
 ## URL list
 
